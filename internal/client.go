@@ -32,9 +32,9 @@ func (cl *FFLogsAPIClient) Post(reqBody []byte, token string) (*FFLogsAPIRespons
 	if err != nil {
 		return nil, err
 	}
-	var graphqlResponse FFLogsAPIResponse
-	if err := json.Unmarshal(body, &graphqlResponse); err != nil {
+	var fflogsRes FFLogsAPIResponse
+	if err := json.Unmarshal(body, &fflogsRes); err != nil {
 		return nil, err
 	}
-	return &graphqlResponse, nil
+	return &fflogsRes, nil
 }
