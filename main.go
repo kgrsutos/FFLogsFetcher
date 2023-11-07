@@ -27,6 +27,9 @@ type GraphQLResponse struct {
 		ReportData struct {
 			Report struct {
 				Code string `json:"code"`
+				Events struct {
+					Data any `json:"data"`
+				} `json:"events"`
 			} `json:"report"`
 		} `json:"reportData"`
 	} `json:"data"`
@@ -46,7 +49,16 @@ func main() {
 
 	// クエリが提供されない場合はデフォルトのクエリを使用
 	if cliContext.Query == "" {
-		cliContext.Query = `{reportData { report(code: "Ddk8NJLzmqgQXRnB") { code } } }`
+		cliContext.Query = `{
+			reportData {
+				report(code: "Ddk8NJLzmqgQXRnB") { 
+					code 
+					events(fightIDs: [6], dataType: Deaths) { 
+						data 
+					}
+				}
+			}
+		}`
 	}
 
 	// GraphQLクエリを作成
@@ -96,5 +108,5 @@ func main() {
 	}
 
 	// レスポンスから取得したデータを出力
-	fmt.Println("Code:", graphqlResponse.Data.ReportData.Report.Code)
+	fmt.Println("Code:", graphqlResponse.Data.ReportData.Report.Events.Data)
 }
