@@ -32,20 +32,20 @@ type GraphQLResponse struct {
 	Data struct {
 		ReportData struct {
 			Report struct {
-				Code string `json:"code"`
+				Code string
 				Fights []struct {
-					ID int  `json:"id"`
-					Name string `json:"name"`
-					Kill bool `json:"kill"`
-				} `json:"fights"`
+					ID int
+					Name string
+					Kill bool
+				}
 				Table struct {
 					Data struct {
-						DeathEvents []DeathEvent `json:"deathEvents"`
-					} `json:"data"`
-				} `json:"table"`
-			} `json:"report"`
-		} `json:"reportData"`
-	} `json:"data"`
+						DeathEvents []DeathEvent
+					}
+				}
+			}
+		}
+	}
 }
 
 type DeathEvent struct {
