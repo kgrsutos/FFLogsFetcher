@@ -9,17 +9,8 @@ import (
 	"os"
 	"strings"
 
-	"gopkg.in/yaml.v3"
+	"github.com/shigeo-kogure/FFLogsFetcher/query"
 )
-
-type QueryConfig struct {
-	ReportIDs []string `yaml:"reportIDs"`
-}
-
-// CLIContext はCLIオプションを格納します。
-type CLIContext struct {
-	Query string `arg:"" optional:"" help:"GraphQL query string."`
-}
 
 // GraphQLQuery はGraphQLのクエリを含むリクエストボディを定義します。
 type GraphQLQuery struct {
@@ -83,7 +74,7 @@ func main() {
 		os.Exit(1)
 	}
 	// Load Query Config
-	config, err := LoadQueryConfig("query.yaml")
+	config, err := query.LoadConfig("query.yaml")
 	if err != nil {
 		fmt.Printf("Error loading query config: %s\n", err)
 		return
@@ -178,20 +169,4 @@ func post(reqBody []byte, token string) *GraphQLResponse {
 		os.Exit(1)
 	}
 	return &graphqlResponse
-}
-
-func LoadQueryConfig(path string) (QueryConfig, error) {
-	var config QueryConfig
-
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return config, err
-	}
-
-	err = yaml.Unmarshal(data, &config)
-	if err != nil {
-		return config, err
-	}
-
-	return config, nil
 }
