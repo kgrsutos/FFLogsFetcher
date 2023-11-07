@@ -1,4 +1,4 @@
-package query
+package internal
 
 import (
 	"os"
@@ -6,12 +6,12 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type Config struct {
+type RequestConfig struct {
 	ReportIDs []string `yaml:"reportIDs"`
 }
 
-func LoadConfig(path string) (Config, error) {
-	var config Config
+func LoadRequestConfig(path string) (RequestConfig, error) {
+	var config RequestConfig
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return config, err
