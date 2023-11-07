@@ -4,8 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/google/go-cmp/cmp"
 )
 
 func setupTestFile(content string) (string, func(), error) {
@@ -29,20 +28,29 @@ reportIDs:
   - "ABC123"
   - "XYZ789"
 `
-	// テスト用のYAMLファイルをセットアップ
 	path, cleanup, err := setupTestFile(content)
-	require.NoError(t, err)
+	if err != nil {
+		t.Fatal(err)
+	}
 	defer cleanup()
-	// LoadConfig関数をテスト
 	config, err := LoadConfig(path)
-	require.NoError(t, err)
-	assert.Equal(t, []string{"ABC123", "XYZ789"}, config.ReportIDs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := Config{
+		ReportIDs: []string{"ABC123", "XYZ789"},
+	}
+	if diff := cmp.Diff(want, config); diff != "" {
+		t.Errorf("LoadConfig() mismatch (-want +got):\n%s", diff)
+	}
 }
 
 func TestLoadConfig_FileError(t *testing.T) {
 	path := "/path/to/nonexistent/file.yaml"
 	_, err := LoadConfig(path)
-	assert.Error(t, err)
+	if err == nil {
+		t.Error("expected an error but got none")
+	}
 }
 
 func TestLoadConfig_UnmarshalError(t *testing.T) {
@@ -50,8 +58,12 @@ func TestLoadConfig_UnmarshalError(t *testing.T) {
 reportIDs: "not a list"
 `
 	path, cleanup, err := setupTestFile(content)
-	require.NoError(t, err)
+	if err != nil {
+		t.Fatal(err)
+	}
 	defer cleanup()
 	_, err = LoadConfig(path)
-	assert.Error(t, err)
+	if err == nil {
+		t.Error("expected an error but got none")
+	}
 }
