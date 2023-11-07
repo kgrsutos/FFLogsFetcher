@@ -28,7 +28,7 @@ func main() {
 		return
 	}
 	fflogsAPICl := internal.FFLogsAPIClient{Client: &http.Client{}}
-	deathEvents := []internal.DeathEvent{}
+	deathEvents := []internal.DeathEventOutput{}
 	for _, reportID := range config.ReportIDs {
 		// Get Fight IDs
 		fightIDsService := internal.NewFightIDsService(token, &fflogsAPICl)
@@ -45,7 +45,13 @@ func main() {
 				log.Error().Stack().Err(err).Msg("failed to get table info with fight id")
 				os.Exit(1)
 			}
-			deathEvents = append(deathEvents, tableResponse.Data.ReportData.Report.Table.Data.DeathEvents...)
+			for _, ev := range tableResponse.Data.ReportData.Report.Table.Data.DeathEvents {
+				deathEvents = append(deathEvents, internal.DeathEventOutput{
+					ReportName: fightIDRes.Name,
+					PlayerName: ev.Name,
+					AbilityName: ev.Ability.Name,
+				})
+			}
 		}
 	}
 	// Output file

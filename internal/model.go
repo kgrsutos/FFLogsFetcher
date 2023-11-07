@@ -32,7 +32,8 @@ type DeathEvent struct {
 	}
 }
 
-type FileOutput struct {
+type DeathEventOutput struct {
 	ReportName string
-	DeathEvent []DeathEvent
+	PlayerName string
+	AbilityName string
 }

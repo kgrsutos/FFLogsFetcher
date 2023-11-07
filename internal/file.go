@@ -6,16 +6,16 @@ import (
 	"strings"
 )
 
-func OutputDeathEvent(path string, events []DeathEvent) error {
+func OutputDeathEvent(path string, events []DeathEventOutput) error {
 	file, err := os.Create(path)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
 	for _, ev := range events {
-		tmpStr := strings.Replace(ev.Ability.Name, "{", "", -1)
-		tmpStr = strings.Replace(tmpStr, "}", "", -1)
-		_, err := file.WriteString(fmt.Sprintf("%s\t%v\n", ev.Name, tmpStr))
+		abn := strings.Replace(ev.AbilityName, "{", "", -1)
+		abn = strings.Replace(abn, "}", "", -1)
+		_, err := file.WriteString(fmt.Sprintf("%s\t%v\t%v\n", ev.PlayerName, abn, ev.ReportName))
 		if err != nil {
 			return err
 		}
