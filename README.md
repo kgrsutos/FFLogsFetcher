@@ -1,5 +1,5 @@
 # FFLogsFetcher
-fflogsAPIから任意のデータをFetchするCLI
+fflogsAPIから任意のデータをFetchするCLI（になる予定）
 
 ## Overview
 
